@@ -1,0 +1,25 @@
+{
+  "name": "mohammadetedali_comp308lab2_ex1",
+  "version": "1.0.0",
+  "description": "This is lab 2 for comp 308",
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/etedalii/COMP308_Lab2.git"
+  },
+  "author": "Mohammad Etedali - 301056465",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/etedalii/COMP308_Lab2/issues"
+  },
+  "homepage": "https://github.com/etedalii/COMP308_Lab2#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "mongoose": "^6.2.1",
+    "nodemon": "^2.0.15"
+  }
+}
