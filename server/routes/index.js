@@ -5,8 +5,8 @@ let indexController = require('../controller/index');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  //res.render('index', { title: 'Express' });
-  res.json({success: true, msg: 'G2 Backed project works the time is: '+ Date.now().toLocaleString()})
+  console.log('inja')
+  res.json({success: true, msg: 'COMP 308 Mohammad Etedali 301056465 the time is: '+ Date.now().toLocaleString()})
 });
 
 /* Get Login Page for access to the website */
