@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
 
 let Student = mongoose.Schema(
   {
@@ -52,9 +53,7 @@ let Student = mongoose.Schema(
   }
 );
 
-//Configure option for Student model
-let options = ({
-    missingPasswordError: 'Wrong / Missing Password'
-})
+Student.plugin(passportLocalMongoose);
 
+module.exports = mongoose.model('Student', Student);
 module.exports.Student = mongoose.model('Student', Student);

@@ -1,43 +1,105 @@
-let createError = require("http-errors");
-let express = require("express");
-let path = require("path");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+let cors = require("cors");
 
+//*************Authentication Section ****************** */
+let session = require("express-session");
+let passport = require("passport");
 
-//*******************Database Configuration ********************************
+let passportJWT = require("passport-jwt");
+let JWTStrategy = passportJWT.Strategy;
+let ExtractJWT = passportJWT.ExtractJwt;
+
+let passportlocal = require("passport-local");
+let localStategy = passportlocal.Strategy;
+let flash = require("connect-flash");
+//************************************************ */
+
+// database setup
 let mongoose = require("mongoose");
-let db = require("./db");
+let DB = require("./db");
 
-// Point to DB URI
-mongoose.connect(db.URI, { useNewUrlParser: true, useUnifiedTopology: true });
-
-let monogoDB = mongoose.connection;
-monogoDB.on("error", console.error.bind(console, "Connection Error"));
-monogoDB.once("open", () => {
-  console.log("Connected to the database MongoDb...");
+// point mongoose to the DB URI
+mongoose.connect(DB.URI, { useNewUrlParser: true, useUnifiedTopology: true });
+let mongoDB = mongoose.connection;
+mongoDB.on("error", console.error.bind(console, "Connection Error:"));
+mongoDB.once("open", () => {
+  console.log("The program connected to MongoDB successfully...");
 });
 
-//********************* End Database Configuration ************************ */
+const indexRouter = require("../routes/index");
+const studentRouter = require("../routes/student");
+const courseRouter = require("../routes/course");
+const app = express();
 
-//change the path because put app.js in config folder
-let indexRouter = require("../routes/index");
-//let bookRouter = require("../routes/book");
+//*******************Setup express session */
+app.use(
+  session({
+    secret: "mohammadSecret",
+    saveUninitialized: false,
+    resave: false,
+  })
+);
 
-let app = express();
-// view engine setup
-app.set("views", path.join(__dirname, "../views"));
-app.set("view engine", "ejs");
+// ***********Initialize flash
+app.use(flash());
 
+//********** Initialize passport */
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "../../public")));
 app.use(express.static(path.join(__dirname, "../../node_modules")));
 
+app.use(cors());
 
-app.use("/", indexRouter);
+// ******** Passport user configuation ************/
+//create a user model instance
+let studentModel = require("../models/student");
+let Student = studentModel.Student;
 
-//For using the router
-//app.use("/book-list", bookRouter);
+//Serialize and Deserialize user info
+passport.serializeUser(Student.serializeUser());
+passport.deserializeUser(Student.deserializeUser());
+passport.use(Student.createStrategy());
+
+// For JWT ----------------------------------------
+
+let jwtOptions = {};
+//check that logged in or not
+jwtOptions.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = DB.Secret;
+
+let strategy = new JWTStrategy(jwtOptions, (jwt_payload, done) => {
+  Student.findById(jwt_payload.id)
+    .then((student) => {
+      return done(null, student);
+    })
+    .catch((err) => {
+      return done(err, false);
+    });
+});
+
+passport.use(strategy);
+
+//-----------------END JWT
+
+// routing
+//add api for upload to cloud
+app.use("/api", indexRouter);
+app.use("/api/student", studentRouter);
+app.use("/api/course", courseRouter);
+//If does not find any other then respond to below path
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, "../../public/index.html"));
+  });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -52,7 +114,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error", { title: "Error" });
+  res.render("error");
 });
 
 module.exports = app;

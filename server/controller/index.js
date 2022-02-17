@@ -1,32 +1,21 @@
-const express = require("express");
+let express = require("express");
 let router = express.Router();
-const mongoose = require("mongoose");
 const passport = require("passport");
+
 //enable jwt
 let jwt = require("jsonwebtoken");
 let DB = require("../config/db");
 
-// define the student model instance
-let studentModel = require("../models/student");
-//create an alise
-let Student = studentModel.Student;
-
-module.exports.displayHomePage = (req, res, next) => {
-  res.json({
-    success: true,
-    msg:
-      "COMP 308 Lab2 - Mohammad Etedali, the date is: " +
-      Date.now().toLocaleString(),
-  });
-};
+// create a reference to the model
+let User = require("../models/user");
 
 module.exports.displayLoginPage = (req, res, next) => {
-  //check that if Student already login or not
-  if (!req.student) {
+  //check that if user already login or not
+  if (!req.user) {
     res.render("auth/login", {
       title: "Login",
       messages: req.flash("loginMessage"),
-      email: req.student ? req.student.username : "",
+      email: req.user ? req.user.username : "",
     });
   } else {
     res.redirect("/");
@@ -85,20 +74,17 @@ module.exports.processRegisterPage = (req, res, next) => {
     password: req.body.password,
     email: req.body.email,
     userType: false, // because I want to be sure create staundard user
-  });
-
+ });
+    
   User.register(newUser, req.body.password, (err) => {
     if (err) {
-      console.log("Error, Inserting a new User");
-      if (err.name === "UserExistsError") {
-        return res.json({
-          success: false,
-          msg: "Register Error, User Already exist",
-        });
-      }
+       console.log("Error, Inserting a new User");
+       if (err.name === "UserExistsError") {
+        return res.json({ success: false, msg: "Register Error, User Already exist" });
+       }
       return next(err);
     } else {
-      return res.json({ success: true, msg: "User Register Successfully" });
+       return res.json({ success: true, msg: "User Register Successfully" });
     }
   });
 };
