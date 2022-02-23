@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import auth from '../auth/auth';
 
 const Login = (props) => {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -45,7 +46,9 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(enteredEmail, enteredPassword);
+    auth.onAuthentication(enteredEmail, enteredPassword);
+    auth.saveToken(enteredEmail, enteredPassword);
+    props.history.push('/home')
   };
 
   return (

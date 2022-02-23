@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
-import Navigation from './Navigation';
-import classes from './MainHeader.module.css';
+import Navigation from "./Navigation";
+import classes from "./MainHeader.module.css";
+import auth from "../auth/auth";
 
 const MainHeader = (props) => {
+  const [loggedInUser, setloggedInUser] = useState();
+  useEffect(() => {
+    const islogin = auth.getToken();
+    setloggedInUser(islogin);
+  }, []);
+
   return (
-    <header className={classes['main-header']}>
+    <header className={classes["main-header"]}>
       <h6>COMP 308 Lab 2 - Mohammad Etedali</h6>
-      <Navigation isLoggedIn={props.isAuthenticated} onLogout={props.onLogout} />
+      <Navigation isLoggedIn={loggedInUser} />
     </header>
   );
 };
