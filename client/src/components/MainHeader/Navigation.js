@@ -1,14 +1,28 @@
-import React from 'react';
+import React from "react";
+import { useHistory } from "react-router-dom";
+import auth from "../auth/auth";
 
-import classes from './Navigation.module.css';
+import classes from "./Navigation.module.css";
 
 const Navigation = (props) => {
+  const handleCourseList = (event) => {
+    event.preventDefault();
+    props.history.push("/courselist");
+  };
+
+  const handleLogout = () => {
+    auth.logout();
+    props.history.push("/");
+  };
+
+  console.log(props.isLoggedIn);
   return (
     <nav className={classes.nav}>
       <ul>
         {props.isLoggedIn && (
           <li>
-            <a href="/">Course</a>
+            {/* <a href="/courselist">Student</a> */}
+            <button onClick={handleCourseList}>Course</button>
           </li>
         )}
         {props.isLoggedIn && (
@@ -18,7 +32,7 @@ const Navigation = (props) => {
         )}
         {props.isLoggedIn && (
           <li>
-            <button onClick={props.onLogout}>Logout</button>
+            <button onClick={handleLogout}>Logout</button>
           </li>
         )}
       </ul>
@@ -26,4 +40,4 @@ const Navigation = (props) => {
   );
 };
 
-export default Navigation
+export default Navigation;

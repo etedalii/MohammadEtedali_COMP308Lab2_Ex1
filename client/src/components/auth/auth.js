@@ -23,11 +23,18 @@ const auth = {
     return data;
   },
 
+  logout() {
+    localStorage.removeItem('my_data');
+    localStorage.removeItem('token');
+    this.isLoggedIn = false
+    return true;
+  },
+
   getToken() {
     const tokenString = localStorage.getItem("token");
     const userToken = JSON.parse(tokenString);
 
-    return userToken;
+    return userToken != null ;
   },
 };
 export default auth;

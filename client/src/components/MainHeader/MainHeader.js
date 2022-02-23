@@ -9,13 +9,15 @@ const MainHeader = (props) => {
   useEffect(() => {
     const islogin = auth.getToken();
     setloggedInUser(islogin);
-  }, []);
+  }, [loggedInUser]);
 
   return (
-    <header className={classes["main-header"]}>
-      <h6>COMP 308 Lab 2 - Mohammad Etedali</h6>
-      <Navigation isLoggedIn={loggedInUser} />
-    </header>
+    <React.Fragment>
+      <header className={classes["main-header"]}>
+        <h6>COMP 308 Lab 2 - Mohammad Etedali</h6>
+        <Navigation isLoggedIn={loggedInUser} />
+      </header>
+    </React.Fragment>
   );
 };
 

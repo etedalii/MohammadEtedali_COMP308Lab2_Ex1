@@ -16,6 +16,11 @@
   color: white;
 }
 
+.nav button {
+  text-decoration: none;
+  color: white;
+}
+
 .nav a:hover,
 .nav a:active {
   color: #f3cafb;
