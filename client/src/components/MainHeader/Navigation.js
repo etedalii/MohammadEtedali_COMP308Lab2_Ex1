@@ -22,8 +22,7 @@ const Navigation = (props) => {
       <ul>
         {props.isLoggedIn && (
           <li>
-            {/* <a href="/courselist">Student</a> */}
-            <button onClick={handleCourseList}>Course</button>
+            <a href="#" onClick={handleCourseList}>Course</a>
           </li>
         )}
         {props.isLoggedIn && (
