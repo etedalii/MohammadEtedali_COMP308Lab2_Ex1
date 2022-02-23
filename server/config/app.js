@@ -98,7 +98,7 @@ app.use("/api/student", studentRouter);
 app.use("/api/course", courseRouter);
 //If does not find any other then respond to below path
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, "../../public/index.html"));
+    res.sendFile(path.join(__dirname, "../../client/index.html"));
   });
 
 // catch 404 and forward to error handler
