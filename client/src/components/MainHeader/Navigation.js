@@ -1,21 +1,22 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import auth from "../auth/auth";
 
 import classes from "./Navigation.module.css";
 
 const Navigation = (props) => {
+  let navigate = useNavigate();
+
   const handleCourseList = (event) => {
     event.preventDefault();
-    props.history.push("/courselist");
+    navigate("/courselist");
   };
 
   const handleLogout = () => {
     auth.logout();
-    props.history.push("/");
+    navigate("/");
   };
 
-  console.log(props.isLoggedIn);
   return (
     <nav className={classes.nav}>
       <ul>

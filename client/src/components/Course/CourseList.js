@@ -1,38 +1,38 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import MainHeader from "../MainHeader/MainHeader";
+
+import { faTrashAlt, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 const CourseList = () => {
   return (
     <React.Fragment>
-      {/* <table className="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">First</th>
-            <th scope="col">Last</th>
-            <th scope="col">Handle</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td>@twitter</td>
-          </tr>
-        </tbody>
-      </table> */}
-      <h1>sdfffffffffffffffff</h1>
+      <MainHeader />
+      <div className="container">
+        <table className="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Course Code</th>
+              <th scope="col">Course Name</th>
+              <th scope="col">Section</th>
+              <th scope="col">Semester</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Mark</td>
+              <td>Otto</td>
+              <td>@mdo</td>
+              <td>
+                <button className="btn btn-sm btn-primary me-1"><FontAwesomeIcon icon={faEdit} /></button>
+                <button className="btn btn-sm btn-danger"><FontAwesomeIcon icon={faTrashAlt} /></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </React.Fragment>
   );
 };

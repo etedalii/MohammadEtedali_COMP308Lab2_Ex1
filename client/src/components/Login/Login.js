@@ -4,6 +4,7 @@ import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
 import auth from '../auth/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Login = (props) => {
   const [enteredEmail, setEnteredEmail] = useState('');
@@ -11,6 +12,7 @@ const Login = (props) => {
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+  let navigate = useNavigate();
 
   useEffect(() => {
     console.log('EFFECT RUNNING');
@@ -48,7 +50,7 @@ const Login = (props) => {
     event.preventDefault();
     auth.onAuthentication(enteredEmail, enteredPassword);
     auth.saveToken(enteredEmail, enteredPassword);
-    props.history.push('/home')
+    navigate('/home')
   };
 
   return (
