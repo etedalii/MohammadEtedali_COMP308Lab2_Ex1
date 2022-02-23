@@ -1,19 +1,43 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainHeader from "../MainHeader/MainHeader";
 
 import { faTrashAlt, faEdit, faAdd } from "@fortawesome/free-solid-svg-icons";
 import Button from "../UI/Button/Button";
 import CourseAdd from "./CourseAdd";
+import api from "../api";
+import TableBody from "./TableBody";
 
 const CourseList = (props) => {
   const [showAdd, setShowAdd] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [courses, setCourse] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+    setLoading(true);
+    await api.getAllCourse().then(result => {
+        console.log(result.data)
+        setCourse(result.data);
+        setLoading(false);
+
+    }).catch((error) => {
+        console.log('error in fetchData:', error)
+      });
+    };  
+    fetchData();
+
+},[]);
+
   const handleAddCourse = () => {
     setShowAdd(true);
   };
 
-  const handleSaveData =(data) => {
-    console.log(data)
+  const handleSaveData = async (data) => {
+    await api.insertCourse(data).then(res => {
+      //window.location.href = `/movies/list`;
+      setShowAdd(false);
+  })
   }
 
   const handleReturnClick =(data) => {
@@ -45,7 +69,8 @@ const CourseList = (props) => {
                 <th scope="col"></th>
               </tr>
             </thead>
-            <tbody>
+            <TableBody data={courses} />
+            {/* <tbody>
               <tr>
                 <th scope="row">1</th>
                 <td>Mark</td>
@@ -60,7 +85,7 @@ const CourseList = (props) => {
                   </button>
                 </td>
               </tr>
-            </tbody>
+            </tbody> */}
           </table>
         )}
       </div>

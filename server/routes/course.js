@@ -1,22 +1,15 @@
 var express = require('express');
 var router = express.Router();
-let indexController = require('../controller/index');
+let courseCtrl = require('../controller/course');
 
 
-router.get('/', function(req, res, next) {
-  res.json({success: true, msg: 'COMP 308 Mohammad Etedali 301056465 the time is: '+ Date.now().toLocaleString()})
-});
+/* Get List -- Read operation */
+router.get("/", courseCtrl.displayCourseList);
 
-/* Get Login Page for access to the website */
-router.get('/login', indexController.displayLoginPage)
+/* GET Route for display the Add page - CREATE Operation */
+router.get('/add', courseCtrl.displayAddPage);
 
-/* Get Login Page for access to the website */
-router.post('/login', indexController.processLoginPage)
-
-/* Get Login Page for access to the website */
-router.post('/signup', indexController.processRegisterPage)
-
-/* Get logout the user from the website */
-router.get('/logout', indexController.performLogout)
+/* POST route for proccessing the add page  */
+router.post('/add', courseCtrl.processCourseAdd);
 
 module.exports = router;
