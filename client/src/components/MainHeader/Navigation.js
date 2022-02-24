@@ -12,6 +12,11 @@ const Navigation = (props) => {
     navigate("/courselist");
   };
 
+  const handleStudentList = (event) => {
+    event.preventDefault()
+    navigate('/studentlist')
+  }
+
   const handleLogout = () => {
     auth.logout();
     navigate("/");
@@ -27,7 +32,7 @@ const Navigation = (props) => {
         )}
         {props.isLoggedIn && (
           <li>
-            <a href="/">Student</a>
+            <a href="#" onClick={handleStudentList}>Student</a>
           </li>
         )}
         {props.isLoggedIn && (

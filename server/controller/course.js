@@ -64,7 +64,6 @@ module.exports.processEditPage = (req, res, next) => {
 module.exports.performDelete = (req, res, next) => {
   let id = req.params.id;
   console.log(id);
-  console.log("00000000000000000000000000000000000000000000000000");
   Course.findOneAndDelete({ _id: req.params.id }, (err, course) => {
     if (err) {
       return res.status(400).json({ success: false, error: err });
