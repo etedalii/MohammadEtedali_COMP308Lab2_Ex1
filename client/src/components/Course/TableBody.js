@@ -10,10 +10,10 @@ const TableBody = (props) => {
       <td>{item.section}</td>
       <td>{item.semester}</td>
       <td>
-        <button className="btn btn-sm btn-primary me-1">
+        <button className="btn btn-sm btn-primary me-1" onClick={() => props.onEditClick(item._id)}>
           <FontAwesomeIcon icon={faEdit} />
         </button>
-        <button className="btn btn-sm btn-danger">
+        <button className="btn btn-sm btn-danger" onClick={() => props.onDeleteClick(item._id)}>
           <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       </td>

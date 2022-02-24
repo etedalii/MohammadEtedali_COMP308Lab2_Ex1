@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import MainHeader from "../MainHeader/MainHeader";
 
-import { faTrashAlt, faEdit, faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import Button from "../UI/Button/Button";
 import CourseAdd from "./CourseAdd";
 import api from "../api";
@@ -10,45 +10,85 @@ import TableBody from "./TableBody";
 
 const CourseList = (props) => {
   const [showAdd, setShowAdd] = useState(false);
-  const [isLoading, setLoading] = useState(false);
   const [courses, setCourse] = useState([]);
+  const [course, setCourseUpdate] = useState({});
+  const [id, setId] = useState("");
+
+  const fetchData = async () => {
+    await api
+      .getAllCourse()
+      .then((result) => {
+        setCourse(result.data);
+      })
+      .catch((error) => {
+        console.log("error in fetchData:", error);
+      });
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-    setLoading(true);
-    await api.getAllCourse().then(result => {
-        console.log(result.data)
-        setCourse(result.data);
-        setLoading(false);
-
-    }).catch((error) => {
-        console.log('error in fetchData:', error)
-      });
-    };  
     fetchData();
-
-},[]);
+  }, []);
 
   const handleAddCourse = () => {
     setShowAdd(true);
   };
 
   const handleSaveData = async (data) => {
-    await api.insertCourse(data).then(res => {
-      //window.location.href = `/movies/list`;
-      setShowAdd(false);
-  })
-  }
+    if (data._id === "") {
+      let payLoad = {
+        courseCode: data.courseCode,
+        courseName: data.courseName,
+        section: data.section,
+        semester: data.semester,
+      };
+      await api.insertCourse(payLoad).then((res) => {
+        setShowAdd(false);
+        fetchData();
+      });
+    } else {
+      await api.updateCourseById(id, data).then((res) => {
+        setShowAdd(false);
+        setCourseUpdate({});
+        setId("");
+        fetchData();
+      });
+    }
+  };
 
-  const handleReturnClick =(data) => {
+  const handleReturnClick = (data) => {
     setShowAdd(false);
-  }
+    setCourseUpdate({});
+    setId("");
+  };
+
+  const handleEdit = async (id) => {
+    setId(id);
+    const course = await api.getCourseById(id);
+    setCourseUpdate(course.data);
+    setShowAdd(true);
+  };
+
+  const handleDelete = (id) => {
+    if (
+      window.confirm(`Do tou want to delete the Course ${id} permanently?`)
+    ) {
+      api.deleteCourseById(id);
+      window.location.reload()
+    }
+  };
 
   return (
     <React.Fragment>
       <MainHeader />
       <div className="container">
-        {showAdd && <CourseAdd saveData={handleSaveData} onCancel={handleReturnClick} />}
+        {showAdd && (
+          <CourseAdd
+            saveData={handleSaveData}
+            onCancel={handleReturnClick}
+            _id={id}
+            data={course}
+          />
+        )}
         {!showAdd && (
           <Button
             type="button"
@@ -69,23 +109,11 @@ const CourseList = (props) => {
                 <th scope="col"></th>
               </tr>
             </thead>
-            <TableBody data={courses} />
-            {/* <tbody>
-              <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
-                <td>
-                  <button className="btn btn-sm btn-primary me-1">
-                    <FontAwesomeIcon icon={faEdit} />
-                  </button>
-                  <button className="btn btn-sm btn-danger">
-                    <FontAwesomeIcon icon={faTrashAlt} />
-                  </button>
-                </td>
-              </tr>
-            </tbody> */}
+            <TableBody
+              data={courses}
+              onEditClick={handleEdit}
+              onDeleteClick={handleDelete}
+            />
           </table>
         )}
       </div>

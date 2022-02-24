@@ -12,4 +12,13 @@ router.get('/add', courseCtrl.displayAddPage);
 /* POST route for proccessing the add page  */
 router.post('/add', courseCtrl.processCourseAdd);
 
+router.get('/getone/:id', courseCtrl.getById);
+/* POST request for proccessing the edit page  */
+//router.post('/edit/:id', passport.authenticate('jwt', {session: false}), questionCtrl.processEditPage);
+router.put('/edit/:id', courseCtrl.processEditPage);
+
+/* Get request - perform delete action */
+//router.delete('/delete/:id', passport.authenticate('jwt', {session: false}), questionCtrl.performDelete);
+router.delete('/delete/:id', courseCtrl.performDelete);
+
 module.exports = router;

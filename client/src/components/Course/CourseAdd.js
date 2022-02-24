@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "../UI/Button/Button";
 import Card from "../UI/Card/Card";
 import Input from "../UI/Input/Input";
@@ -11,6 +11,15 @@ const CourseAdd = (props) => {
   const [courseNameIsValid, setCourseNameIsValid] = useState();
   const [enteredSection, setEnterSection] = useState("");
   const [enteredSemester, setEnterSemester] = useState("");
+
+  useEffect(() => {
+    if (props._id !== "") {
+      setEnterCourseCode(props.data.data.courseCode);
+      setEnterCourseName(props.data.data.courseName);
+      setEnterSection(props.data.data.section);
+      setEnterSemester(props.data.data.semester);
+    }
+  }, []);
 
   const courseCodeChangeHandler = (event) => {
     setEnterCourseCode(event.target.value.trim());
@@ -39,17 +48,18 @@ const CourseAdd = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     const date = {
-      courseCode : enteredCourseCode,
+      _id: props._id,
+      courseCode: enteredCourseCode,
       courseName: enteredCourseName,
       section: enteredSection,
-      semester: enteredSemester
-    }
-    props.saveData(date)
+      semester: enteredSemester,
+    };
+    props.saveData(date, );
 
-    setEnterCourseCode('')
-    setEnterCourseName('')
-    setEnterSection('')
-    setEnterSemester('')
+    setEnterCourseCode("");
+    setEnterCourseName("");
+    setEnterSection("");
+    setEnterSemester("");
   };
 
   return (
@@ -109,7 +119,11 @@ const CourseAdd = (props) => {
                 <Button type="submit" className="mb-2">
                   Save
                 </Button>
-                <Button type="Button" className="ms-1 mb-2" onClick={props.onCancel}>
+                <Button
+                  type="Button"
+                  className="ms-1 mb-2"
+                  onClick={props.onCancel}
+                >
                   Return
                 </Button>
               </div>
