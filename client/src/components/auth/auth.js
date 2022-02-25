@@ -25,18 +25,10 @@ const auth = {
     localStorage.setItem("token", JSON.stringify(userToken));
   },
 
-  saveDataToLocalStorage(data) {
-    localStorage.setItem("my_data", JSON.stringify(data));
-  },
-
-  getDataToLocalStorage() {
-    const dataString = localStorage.getItem('my_data');
-    const data = JSON.parse(dataString);
-    return data;
-  },
-
-  logout() {
-    localStorage.removeItem('my_data');
+  async logout() {
+    await apis.logoutUser().then((res) => {
+      this.isLoggedIn = res.data.success;
+    });
     localStorage.removeItem('token');
     this.isLoggedIn = false
     return true;

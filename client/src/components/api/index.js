@@ -17,6 +17,7 @@ export const updateStudentById = (id, payload) => api.put(`/student/edit/${id}`,
 export const deleteStudentById = id => api.delete(`/student/delete/${id}`)
 
 export const loginUser = payLoad => api.post('/login', payLoad);
+export const logoutUser = () => api.post('/logout');
 
 const apis = {
     insertCourse,
@@ -32,6 +33,7 @@ const apis = {
     deleteStudentById,
 
     loginUser,
+    logoutUser
 }
 
 export default apis

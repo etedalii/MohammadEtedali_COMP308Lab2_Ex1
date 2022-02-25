@@ -49,6 +49,6 @@ module.exports.processLoginPage = (req, res, next) => {
 };
 
 module.exports.performLogout = (req, res, next) => {
-  req.logout();
-  res.json({ success: true, msg: "User Successfully Logged out" });
+  //req.logout();
+  return res.status(200).json({ success: true, msg: "User Successfully Logged out" });
 };
