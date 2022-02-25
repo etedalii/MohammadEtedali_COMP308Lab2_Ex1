@@ -12,21 +12,14 @@ const Login = (props) => {
   const [enteredPassword, setEnteredPassword] = useState('');
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
+  const [error, setError] = useState(false);
   let navigate = useNavigate();
-
-  useEffect(() => {
-    console.log('EFFECT RUNNING');
-
-    return () => {
-      console.log('EFFECT CLEANUP');
-    };
-  }, []);
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
 
     setFormIsValid(
-      event.target.value.includes('@') && enteredPassword.trim().length > 6
+      event.target.value.includes('@') && enteredPassword.trim().length > 3
     );
   };
 
@@ -34,7 +27,7 @@ const Login = (props) => {
     setEnteredPassword(event.target.value);
 
     setFormIsValid(
-      enteredEmail.includes('@') && event.target.value.trim().length > 6
+      enteredEmail.includes('@') && event.target.value.trim().length > 3
     );
   };
 
@@ -46,15 +39,22 @@ const Login = (props) => {
     setPasswordIsValid(enteredPassword.trim().length > 6);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-    auth.onAuthentication(enteredEmail, enteredPassword);
-    auth.saveToken(enteredEmail, enteredPassword);
-    navigate('/home')
+    let result = await auth.onAuthentication(enteredEmail, enteredPassword);
+    if(result.success){
+      auth.saveToken(result.token);
+      setError(false)
+      navigate('/home')
+    }
+    else{
+      setError(true)
+    }
   };
 
   return (
     <Card className={classes.login}>
+      {error && <span className='alert alert-danger text-center'>Username or Password is worng!</span>}
       <form onSubmit={submitHandler}>
         <div
           className={`${classes.control} ${

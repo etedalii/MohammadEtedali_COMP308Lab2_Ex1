@@ -16,6 +16,8 @@ export const getStudentById = id => api.get(`/student/getone/${id}`)
 export const updateStudentById = (id, payload) => api.put(`/student/edit/${id}`, payload)
 export const deleteStudentById = id => api.delete(`/student/delete/${id}`)
 
+export const loginUser = payLoad => api.post('/login', payLoad);
+
 const apis = {
     insertCourse,
     getAllCourse,
@@ -28,6 +30,8 @@ const apis = {
     getStudentById,
     updateStudentById,
     deleteStudentById,
+
+    loginUser,
 }
 
 export default apis

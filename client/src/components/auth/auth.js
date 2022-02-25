@@ -1,15 +1,27 @@
+import apis from "../api";
+
 const auth = {
   isLoggedIn: false,
 
-  onAuthentication(userToken, password) {
-    this.isLoggedIn = true;
+  async onAuthentication(userToken, password) {
+    let payLoad = {
+      username: userToken,
+      password: password
+    };
+    let result;
+    await apis.loginUser(payLoad).then((res) => {
+      this.isLoggedIn = res.data.success;
+      result = res.data;
+    });
+
+    return result;
   },
   
   getLogInStatus() {
     return this.isLoggedIn;
   },
   
-  saveToken(userToken, password) {
+  saveToken(userToken) {
     localStorage.setItem("token", JSON.stringify(userToken));
   },
 

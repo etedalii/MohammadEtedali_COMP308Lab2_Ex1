@@ -30,6 +30,9 @@ let Student = mongoose.Schema(
     program: {
       type: String,
     },
+    username: {
+      type: String,
+    },
   },
   {
     collection: "students",

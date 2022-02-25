@@ -38,6 +38,7 @@ module.exports.processStudentAdd = (req, res, next) => {
     program: body.program,
     address: body.address,
     password: body.password,
+    username: body.email
   };
 
   Student.create(newStudent, (err, entity) => {
