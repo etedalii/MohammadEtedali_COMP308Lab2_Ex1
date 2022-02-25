@@ -6,22 +6,22 @@ import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import Button from "../UI/Button/Button";
 import StudentAdd from "./StudentAdd";
 import api from "../api";
-import TableBody from '../UI/Table/TableBody'
+import TableBody from "./TableBody";
 
 const StudentList = (props) => {
   const [showAdd, setShowAdd] = useState(false);
-  const [courses, setCourse] = useState([]);
-  const [course, setCourseUpdate] = useState({});
+  const [students, setStudents] = useState([]);
+  const [student, setStudent] = useState({});
   const [id, setId] = useState("");
 
   const fetchData = async () => {
     await api
-      .getAllCourse()
+      .getAllStudent()
       .then((result) => {
-        setCourse(result.data);
+        setStudents(result.data);
       })
       .catch((error) => {
-        console.log("error in fetchData:", error);
+        console.log("error in fetch Data:", error);
       });
   };
 
@@ -29,26 +29,33 @@ const StudentList = (props) => {
     fetchData();
   }, []);
 
-  const handleAddCourse = () => {
+  const handleAddStudent = () => {
     setShowAdd(true);
   };
 
   const handleSaveData = async (data) => {
     if (data._id === "") {
       let payLoad = {
-        courseCode: data.courseCode,
-        courseName: data.courseName,
-        section: data.section,
-        semester: data.semester,
+        studentnumber: data.studentnumber,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        phonenumber: data.phonenumber,
+        city: data.city,
+        email: data.email,
+        program: data.program,
+        address: data.address,
+        password: data.password,
       };
-      await api.insertCourse(payLoad).then((res) => {
+      await api.insertStudent(payLoad).then((res) => {
         setShowAdd(false);
         fetchData();
+        setStudent({});
+        setId("");
       });
     } else {
-      await api.updateCourseById(id, data).then((res) => {
+      await api.updateStudentById(id, data).then((res) => {
         setShowAdd(false);
-        setCourseUpdate({});
+        setStudent({});
         setId("");
         fetchData();
       });
@@ -57,23 +64,23 @@ const StudentList = (props) => {
 
   const handleReturnClick = (data) => {
     setShowAdd(false);
-    setCourseUpdate({});
+    setStudent({});
     setId("");
   };
 
   const handleEdit = async (id) => {
     setId(id);
-    const course = await api.getCourseById(id);
-    setCourseUpdate(course.data);
+    const entity = await api.getStudentById(id);
+    setStudent(entity.data);
     setShowAdd(true);
   };
 
   const handleDelete = (id) => {
     if (
-      window.confirm(`Do tou want to delete the Course ${id} permanently?`)
+      window.confirm(`Do tou want to delete the Student ${id} permanently?`)
     ) {
-      api.deleteCourseById(id);
-      window.location.reload()
+      api.deleteStudentById(id);
+      window.location.reload();
     }
   };
 
@@ -86,14 +93,14 @@ const StudentList = (props) => {
             saveData={handleSaveData}
             onCancel={handleReturnClick}
             _id={id}
-            data={course}
+            data={student}
           />
         )}
         {!showAdd && (
           <Button
             type="button"
             className="btn btn-primary"
-            onClick={handleAddCourse}
+            onClick={handleAddStudent}
           >
             Create New <FontAwesomeIcon icon={faAdd} />
           </Button>
@@ -107,11 +114,13 @@ const StudentList = (props) => {
                 <th scope="col">Last Name</th>
                 <th scope="col">City</th>
                 <th scope="col">Program</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
                 <th scope="col"></th>
               </tr>
             </thead>
             <TableBody
-              data={courses}
+              data={students}
               onEditClick={handleEdit}
               onDeleteClick={handleDelete}
             />

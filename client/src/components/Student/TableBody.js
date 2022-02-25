@@ -5,10 +5,13 @@ import { faTrashAlt, faEdit } from "@fortawesome/free-solid-svg-icons";
 const TableBody = (props) => {
   const items = props.data.map((item) => (
     <tr key={item._id}>
-      <td>{item.courseCode}</td>
-      <td>{item.courseName}</td>
-      <td>{item.section}</td>
-      <td>{item.semester}</td>
+      <td>{item.studentnumber}</td>
+      <td>{item.firstname}</td>
+      <td>{item.lastname}</td>
+      <td>{item.city}</td>
+      <td>{item.program}</td>
+      <td>{item.email}</td>
+      <td>{item.address}</td>
       <td>
         <button className="btn btn-sm btn-primary me-1" onClick={() => props.onEditClick(item._id)}>
           <FontAwesomeIcon icon={faEdit} />

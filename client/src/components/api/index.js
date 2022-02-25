@@ -10,12 +10,24 @@ export const getCourseById = id => api.get(`/course/getone/${id}`)
 export const updateCourseById = (id, payload) => api.put(`/course/edit/${id}`, payload)
 export const deleteCourseById = id => api.delete(`/course/delete/${id}`)
 
+export const insertStudent = payLoad => api.post('/student/add', payLoad);
+export const getAllStudent = () => api.get(`/student`)
+export const getStudentById = id => api.get(`/student/getone/${id}`)
+export const updateStudentById = (id, payload) => api.put(`/student/edit/${id}`, payload)
+export const deleteStudentById = id => api.delete(`/student/delete/${id}`)
+
 const apis = {
     insertCourse,
     getAllCourse,
     updateCourseById,
     getCourseById,
     deleteCourseById,
+    
+    insertStudent,
+    getAllStudent,
+    getStudentById,
+    updateStudentById,
+    deleteStudentById,
 }
 
 export default apis
